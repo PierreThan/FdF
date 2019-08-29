@@ -24,15 +24,16 @@ typedef struct		s_point
 
 typedef struct		s_map
 {
-	t_list			*point_list;
 	int				map_length;
 	int				map_width;
 	int				map_height;
 	t_point				**map;
+/*
 	int				x;
 	int				y;
 	int				max;
 	int				pad;
+*/
 }					t_map;
 
 typedef struct		s_env
@@ -40,15 +41,18 @@ typedef struct		s_env
 	void			*mlx_ptr;
 	void			*win_ptr;
 	void			*img_ptr;
-	char			*data;
-	int			bpp;
-	int			endian;
-	int			win_length;
-	int			win_width;
-	int			keycode;
-	int			proj;
+	char			*img_data;
+	int				bpp;
+	int				size_line;
+	int				endian;
+	int				win_length;
+	int				win_width;
+/*
+	int				keycode;
+	int				proj;
 	struct s_color	color;
 	struct s_map	map;
 	struct s_point	point;
 	struct s_mov	mov;
+*/
 }					t_env;
