@@ -14,37 +14,56 @@ Structure de la map :
 on utilise GNL qui remplie une str "line", on la verifie, puis on complète la map
 en ajoutant
 */
-typedef struct		s_point
+typedef struct	s_point
 {
-	int				x;
-	int				y;
-	int				z;
-	int				color;
-}					t_point;
+	int			x;
+	int			y;
+	int			z;
+	int			color;
+}				t_point;
 
-typedef struct		s_map
+typedef struct	s_map
 {
-	int				map_length;
-	int				map_width;
-	int				map_height;
-	t_point				**map;
+	int			map_length;
+	int			map_width;
+	int			map_height;
+	t_point		**map;
+/*	int			x;
+	int			y;
+	int			max;
+	int			pad;*/
+}				t_map;
+
+typedef struct	s_img
+{
+	void		*img_ptr;
+	int			*data;	//Here you got an int * even though mlx_get_data_addr returns
+						//a char *, i'll talk more about this in the .c file.
+						////Here are the 3 "useless" variables. You can find more informations about these in the man page.
+	int			size_l;
+	int			bpp;
+	int			endian;
+}				t_img;
+	//
+	//			/*
+	//			 Here is my main struct containing every variables needed by the MLX.
+	//			  - mlx_ptr stores the return value of mlx_init
+	//			   - win stores the return value of mlx_new_window
+	//			    - img will store everything we need for the image part, the struct is described above.
+	//			     */
+typedef struct	s_mlx
+{
+	void		*mlx_ptr;
+	void		*win;
+	t_img		img;
+}				t_mlx;
+
 /*
-	int				x;
-	int				y;
-	int				max;
-	int				pad;
-*/
-}					t_map;
-
 typedef struct		s_env
 {
 	void			*mlx_ptr;
 	void			*win_ptr;
-	void			*img_ptr;
-	char			*img_data;
-	int				bpp;
-	int				size_line;
-	int				endian;
+	t_img			*img;
 	int				win_length;
 	int				win_width;
 /*

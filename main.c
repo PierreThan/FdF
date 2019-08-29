@@ -23,9 +23,20 @@ int		check_input(int ac, char **argv)
 	return (1);
 }
 
-int		fdf_to_string(char **argv)
+int		parse_file(int fd, t_map *map)
 {
+	//verifie la map dans le fichier fdf
+	//et remplie la structure map
+}
 
+int		ft_fdf(t_map *map, t_mlx *mlx)
+{
+	// visuel de la map :
+		// algo de tracé de segments
+		// differents angles de vus : isometrique/parallele
+		// matrice de rotation
+	//menu, interaction (clavier, souris) : zoom, deplacement, rotation, flatten
+	//free
 }
 
 // Idée de main :
@@ -39,7 +50,7 @@ int		main(int ac, char **argv)
 	else if (parse_file(fd, map) == 0)
 		return (-1);
 	else
-		ft_fdf(map, env);
+		ft_fdf(map, mlx);
 	return (0);
 }
 
