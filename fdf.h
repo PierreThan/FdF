@@ -55,7 +55,7 @@ typedef struct	s_mlx
 {
 	void		*mlx_ptr;
 	void		*win;
-	t_img		img;
+	t_img		*img;
 }				t_mlx;
 
 /*
