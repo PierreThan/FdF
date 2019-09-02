@@ -24,9 +24,9 @@ typedef struct	s_point
 
 typedef struct	s_map
 {
-	int			map_length;
-	int			map_width;
-	int			map_height;
+	int			length;
+	int			width;
+	int			height;
 	t_point		**map;
 /*	int			x;
 	int			y;
@@ -58,6 +58,12 @@ typedef struct	s_mlx
 	t_img		*img;
 }				t_mlx;
 
+typedef struct	s_fdf
+{
+	int		fd;
+	t_map	*map;
+	t_mlx	*mlx;
+}
 /*
 typedef struct		s_env
 {
