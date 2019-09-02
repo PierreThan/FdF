@@ -63,7 +63,7 @@ typedef struct	s_fdf
 	int		fd;
 	t_map	*map;
 	t_mlx	*mlx;
-}
+}				t_fdf;
 /*
 typedef struct		s_env
 {
