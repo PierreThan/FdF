@@ -51,11 +51,52 @@ int		get_file(int fd, t_list **file)
 	return (width);
 }
 
-t_point		*create_point(char *str)
+int		check_point(t_point *point, int x, int y, char *str)
 {
+	int	i;
+
+	i = 0;
+	if (!ft_isdigit(str[i]))
+		return (-1);
+	point->z = ft_atoi(str);
+	while (ft_isdigit(str[i]))
+		i++;
+	if (!str[i])
+		return (t_point_new);
+	if ((str[i] && str[i] != ',') || (ft_strlen(str + i) != 9))
+		return (-1);
+	else
+	{
+		i++;
+		if (str[i] != '0' || str[i + 1] != 'x')
+			return (-1);
+		get_point_color(str + i + 2));
+	}
+
 //verifie qu'on a bien 1 entier positif
 //potentiellement suivi d'une virgule puis de la couleur en hexa->sinon blanc
 //renvoie le t_point correspondant
+}
+
+int		get_point_color(char *str, t_point *point)
+{
+	int	i;
+
+	i = 0;
+	while (str[i])
+	{
+		if (ft_isdigit(str[i]) || (str[i] >= 'A' && str[i] <= 'F'))
+		{
+			if (ft_isdigit(str[i]))
+				point->color += pow(16, 5 - i) * (str[i] - 48);
+			else
+				point->color += pow(16, 5 - i) * (str[i] - 55);
+			i++;
+		}
+		else
+			return (-1);
+	}
+	return (0);
 }
 
 int			*create_map(t_list *file, t_map *map)
@@ -151,17 +192,19 @@ int		main(int ac, char **argv)
 	t_mlx	mlx;
 	int		fd;
 
-	if ((fd = open(argv[1])) == -1)		// a compléter
+	if ((fd = open(argv[1], O_RDONLY)) == -1)		// a compléter
 	{
 		//OPEN ERROR MESSAGE
 		return (-1);
 	}
 	if (check_input(ac, argv) == 0)
 		return (-1);
-	else if (parse_file(fd, map) == 0)
+	get_file(fd, &file);
+	/*else if (parse_file(fd, map) == 0)
 		return (-1);
 	else
 		ft_fdf(map, mlx);
+*/
 	return (0);
 }
 
