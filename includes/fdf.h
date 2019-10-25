@@ -1,83 +1,134 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   fdf.h                                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: pthan <marvin@42.fr>                       +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/10/25 02:23:58 by pthan             #+#    #+#             */
+/*   Updated: 2019/10/25 02:31:28 by pthan            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef FDF_H
 # define FDF_H
 
-/*
-Objectif : utiliser 1 seule ouverture/lecture de fichier pour verifier la
-validité du fichier fdf et remmplir la structure map (grace a GNL)
-a verifier :
-	nom du fichier;
-	map rectangulaire non vide uniquement;
-	fichier contenant uniquement des espaces ou des nombres(positifs ou negatifs);
-	si plusieurs espaces a la suite, les considérer comme 1 seul espace.
+# define WIN_WIDTH 1920
+# define WIN_HEIGHT 1080
 
-Structure de la map :
-on utilise GNL qui remplie une str "line", on la verifie, puis on complète la map
-en ajoutant
-*/
+# define FT_MIN(A, B) (((A) < (B)) ? (A) : (B))
+# define FT_MAX(A, B) (((A) > (B)) ? (A) : (B))
+# define FT_ABS(X) (((X) < 0) ? (-(X)) : (X))
+
+# include "mlx.h"
+# include "../libft/includes/libft.h"
+
+typedef enum
+{
+	ISO,
+	PARALLEL
+}	t_proj;
+
 typedef struct	s_point
 {
-	int			x;
-	int			y;
-	int			z;
-	int			color;
+	int	x;
+	int	y;
+	int	z;
+	int	color;
 }				t_point;
-
-typedef struct	s_map
-{
-	int			length;
-	int			width;
-	int			height;
-	t_point		**map;
-/*	int			x;
-	int			y;
-	int			max;
-	int			pad;*/
-}				t_map;
 
 typedef struct	s_img
 {
 	void		*img_ptr;
-	int			*data;	//Here you got an int * even though mlx_get_data_addr returns
-						//a char *, i'll talk more about this in the .c file.
-						////Here are the 3 "useless" variables. You can find more informations about these in the man page.
+	int			*data;
 	int			size_l;
 	int			bpp;
 	int			endian;
 }				t_img;
-	//
-	//			/*
-	//			 Here is my main struct containing every variables needed by the MLX.
-	//			  - mlx_ptr stores the return value of mlx_init
-	//			   - win stores the return value of mlx_new_window
-	//			    - img will store everything we need for the image part, the struct is described above.
-	//			     */
+
 typedef struct	s_mlx
 {
 	void		*mlx_ptr;
-	void		*win;
-	t_img		*img;
+	void		*win_ptr;
+	t_img		img;
 }				t_mlx;
+
+typedef struct	s_camera
+{
+	t_proj		projection;
+	int			zoom;
+	double		rotx;
+	double		roty;
+	double		rotz;
+	float		z_flattener;
+	int			x_offset;
+	int			y_offset;
+}				t_cam;
 
 typedef struct	s_fdf
 {
-	int		fd;
-	t_map	*map;
-	t_mlx	*mlx;
+	t_mlx		mlx;
+	int			fd;
+	int			depth;
+	int			width;
+	int			height;
+	t_cam		cam;
+	t_point		**map;
+	char		*file;
+	t_point		max;
 }				t_fdf;
+
 /*
-typedef struct		s_env
-{
-	void			*mlx_ptr;
-	void			*win_ptr;
-	t_img			*img;
-	int				win_length;
-	int				win_width;
-/*
-	int				keycode;
-	int				proj;
-	struct s_color	color;
-	struct s_map	map;
-	struct s_point	point;
-	struct s_mov	mov;
+**		MAIN
 */
-}					t_env;
+int				free_map(t_fdf *fdf);
+
+/*
+**      INPUT CHECK
+*/
+
+int				parse_file(t_fdf *fdf);
+
+/*
+**		TAB
+*/
+t_point			*create_tab(t_fdf *fdf, char *str);
+
+/*
+**		ROTATE
+*/
+void			rotate_around_oz(t_point *point, double theta);
+void			rotate_around_oy(t_point *point, double theta);
+void			rotate_around_ox(t_point *point, double theta);
+
+/*
+**		PROJECT
+*/
+void			model_to_view_map(t_fdf *fdf, t_point *view_map);
+
+/*
+**		DRAW
+*/
+void			draw(t_fdf *fdf);
+
+/*
+**		COLOR
+*/
+int				get_color(
+					t_point current, t_point start, t_point end, t_point delta);
+
+/*
+**		MLX
+*/
+void			ft_display_window(
+					t_mlx *mlx, char *title, int img_width, int img_height);
+void			setup_controls(t_fdf *fdf);
+
+/*
+**		CONTROLS
+*/
+void			flatten(int key, t_fdf *fdf);
+void			zoom(int key, t_fdf *fdf);
+void			rotate(int key, t_fdf *fdf);
+void			move(int key, t_fdf *fdf);
+#endif
